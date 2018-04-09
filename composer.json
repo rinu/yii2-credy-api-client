@@ -1,0 +1,25 @@
+{
+    "name": "alexeevdv/yii2-credy-api-client",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitry Alekseev",
+            "email": "mail@alexeevdv.ru"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "credy\\api\\": "src"
+        }
+    },
+    "require": {
+        "yiisoft/yii2-httpclient": "~2.0.6"
+    }
+}
