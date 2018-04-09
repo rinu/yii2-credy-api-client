@@ -1,13 +1,13 @@
 <?php
 
-namespace credy\api\mx\models;
+namespace credy\api\v3\mx\models;
 
 use Yii;
 use yii\base\Model;
 
 /**
  * Class CustomerAddress
- * @package credy\api\mx\models
+ * @package credy\api\v3\mx\models
  */
 class CustomerAddress extends Model
 {

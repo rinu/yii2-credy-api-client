@@ -6,6 +6,10 @@ use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\httpclient\Client as HttpClient;
 
+/**
+ * Class Client
+ * @package credy\api\v3
+ */
 class Client extends Component
 {
     const PRODUCTION_URL = 'https://api.credy.eu/v3/';

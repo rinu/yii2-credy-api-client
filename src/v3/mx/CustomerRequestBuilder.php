@@ -1,11 +1,11 @@
 <?php
 
-namespace credy\api\mx;
+namespace credy\api\v3\mx;
 
-use credy\api\ICustomerRequestBuilder;
-use credy\api\mx\models\Customer;
-use credy\api\mx\models\CustomerAddress;
-use credy\api\mx\models\CustomerEmployment;
+use credy\api\v3\ICustomerRequestBuilder;
+use credy\api\v3\mx\models\Customer;
+use credy\api\v3\mx\models\CustomerAddress;
+use credy\api\v3\mx\models\CustomerEmployment;
 
 /**
  * Class CustomerRequestBuilder

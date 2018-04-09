@@ -1,12 +1,12 @@
 <?php
 
-namespace credy\api;
+namespace credy\api\v3;
 
 use yii\base\Component;
 
 /**
  * Class Request
- * @package credy\api
+ * @package credy\api\v3
  */
 class Request extends Component
 {

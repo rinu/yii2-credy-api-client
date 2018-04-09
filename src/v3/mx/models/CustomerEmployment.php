@@ -1,12 +1,12 @@
 <?php
 
-namespace credy\api\mx\models;
+namespace credy\api\v3\mx\models;
 
 use yii\base\Model;
 
 /**
  * Class CustomerEmployment
- * @package credy\api\mx\models
+ * @package credy\api\v3\mx\models
  */
 class CustomerEmployment extends Model
 {
