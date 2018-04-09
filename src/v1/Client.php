@@ -5,6 +5,7 @@ namespace credy\api\v1;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 use yii\httpclient\Exception as HttpClientException;
@@ -59,7 +60,7 @@ class Client extends Component
         $response = Yii::createObject(LeadResponse::class);
 
         try {
-            $httpResponse = $this->httpClient->post('lead', $data)->send();
+            $httpResponse = Instance::ensure($this->httpClient, HttpClient::class)->post('lead', $data)->send();
         } catch (HttpClientException $e) {
             Yii::$app->errorHandler->logException($e);
             $response->setStatus(LeadResponse::STATUS_FAILED);
