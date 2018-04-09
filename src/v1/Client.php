@@ -9,6 +9,7 @@ use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 use yii\httpclient\Exception as HttpClientException;
+use yii\httpclient\Response as HttpClientResponse;
 
 /**
  * Class Client
@@ -60,6 +61,7 @@ class Client extends Component
         $response = Yii::createObject(LeadResponse::class);
 
         try {
+            /** @var HttpClientResponse $httpResponse */
             $httpResponse = Instance::ensure($this->httpClient, HttpClient::class)->post('lead', $data)->send();
         } catch (HttpClientException $e) {
             Yii::$app->errorHandler->logException($e);
