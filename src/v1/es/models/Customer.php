@@ -50,13 +50,13 @@ class Customer extends Model
 
     public $loanSum;
 
-    public $loadPeriod;
+    public $loanPeriod;
 
     public $maritalStatus;
 
     public $dependantCount;
 
-    public $hasBadCreditStory;
+    public $hasBadCreditHistory;
 
     public $hasAgreeElectronicServices;
 
