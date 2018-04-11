@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 use yii\httpclient\Exception as HttpClientException;
 use yii\httpclient\Response as HttpClientResponse;
+use yii\i18n\I18N;
+use yii\i18n\PhpMessageSource;
 
 /**
  * Class Client
@@ -39,6 +41,7 @@ class Client extends Component
      */
     public function init()
     {
+        $this->initTranslations();
         if ($this->apiKey === null) {
             throw new InvalidConfigException('`apiKey` is required');
         }
@@ -94,5 +97,23 @@ class Client extends Component
         $string .= ArrayHelper::getValue($data, 'api_key');
         $string .= ArrayHelper::getValue($data, 'timestamp');
         return sha1($string);
+    }
+
+    /**
+     * Initializes translations for component
+     * @throws InvalidConfigException
+     */
+    protected function initTranslations()
+    {
+        /** @var I18N $i18n */
+        $i18n = Instance::ensure($this->i18n, I18N::class);
+        $i18n->translations['credy*'] = [
+            'class' => PhpMessageSource::class,
+            'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'messages',
+            'sourceLanguage' => 'en',
+            'fileMap' => [
+                'credy' => 'credy.php',
+            ],
+        ];
     }
 }

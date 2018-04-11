@@ -141,7 +141,7 @@ class Customer extends Model
                 'trim',
             ],
             ['personalId', 'filter', 'filter' => 'strtoupper'],
-            [['bankAccountNumber', 'postalIndex'], 'filter', function ($value) {
+            [['bankAccountNumber', 'postalIndex'], 'filter', 'filter' => function ($value) {
                 return preg_replace('/\s/', '', $value);
             }],
             [
