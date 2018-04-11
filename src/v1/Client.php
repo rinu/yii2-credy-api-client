@@ -36,6 +36,11 @@ class Client extends Component
     ];
 
     /**
+     * @var string|array|I18N
+     */
+    public $i18n = 'i18n';
+
+    /**
      * @inheritdoc
      * @throws InvalidConfigException
      */

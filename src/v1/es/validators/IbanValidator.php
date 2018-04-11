@@ -32,13 +32,13 @@ class IbanValidator extends Validator
         try {
             $iban = new IBAN($value);
             if (strtoupper($iban->Country()) != 'ES') {
-                return [$this->message];
+                return [$this->message, []];
             }
             if (!$iban->Verify()) {
-                return [$this->message];
+                return [$this->message, []];
             }
         } catch (Exception $e) {
-            return [$this->message];
+            return [$this->message, []];
         }
         return null;
     }
