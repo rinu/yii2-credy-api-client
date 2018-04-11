@@ -15,29 +15,34 @@ use yii\base\Model;
  */
 class Customer extends Model
 {
-    const GENDER_MALE = 'male';
-    const GENDER_FEMALE = 'female';
+    const GENDER_MALE = 'MALE';
+    const GENDER_FEMALE = 'FEMALE';
 
-    const PHONE_PLAN_PREPAID = 'prepaid';
-    const PHONE_PLAN_CONTRACT = 'contract';
+    const PHONE_PLAN_PREPAID = 'PREPAID';
+    const PHONE_PLAN_CONTRACT = 'CONTRACT';
 
-    const EMPLOYMENT_EMPLOYED_INDEFINITE_PERIOD = 'employed_indefinite_period';
-    const EMPLOYMENT_EMPLOYED_SPECIFIED_PERIOD = 'employed_specified_period';
-    const EMPLOYMENT_WRITTEN_CONTRACT_OR_ORDER = 'written_contract_or_order';
-    const EMPLOYMENT_ECONOMIC_ACTIVITY = 'economic_activity';
-    const EMPLOYMENT_UNEMPLOYED = 'unemployed';
-    const EMPLOYMENT_MATERNITY_LEAVE = 'maternity_leave';
-    const EMPLOYMENT_BENEFITS = 'benefits';
-    const EMPLOYMENT_STUDENT = 'student';
-    const EMPLOYMENT_PENSIONER1 = 'pensioner1';
-    const EMPLOYMENT_PENSIONER2 = 'pensioner2';
-    const EMPLOYMENT_OTHER = 'other';
+    const EMPLOYMENT_EMPLOYED_INDEFINITE_PERIOD = 'EMPLOYED_INDEFINITE_PERIOD';
+    const EMPLOYMENT_EMPLOYED_SPECIFIED_PERIOD = 'EMPLOYED_SPECIFIED_PERIOD';
+    const EMPLOYMENT_WRITTEN_CONTRACT_OR_ORDER = 'WRITTEN_CONTRACT_OR_ORDER';
+    const EMPLOYMENT_ECONOMIC_ACTIVITY = 'ECONOMIC_ACTIVITY';
+    const EMPLOYMENT_UNEMPLOYED = 'UNEMPLOYED';
+    const EMPLOYMENT_MATERNITY_LEAVE = 'MATERNITY_LEAVE';
+    const EMPLOYMENT_BENEFITS = 'BENEFITS';
+    const EMPLOYMENT_STUDENT = 'STUDENT';
+    const EMPLOYMENT_PENSIONER1 = 'PENSIONER1';
+    const EMPLOYMENT_PENSIONER2 = 'PENSIONER2';
+    const EMPLOYMENT_OTHER = 'OTHER';
 
-    const MARITAL_STATUS_SINGLE = 'single';
-    const MARITAL_STATUS_MARRIED = 'married';
-    const MARITAL_STATUS_DIVORCED = 'divorced';
-    const MARITAL_STATUS_WITH_PARTNER = 'with_partner';
-    const MARITAL_STATUS_WIDOW = 'widow';
+    const MARITAL_STATUS_SINGLE = 'SINGLE';
+    const MARITAL_STATUS_MARRIED = 'MARRIED';
+    const MARITAL_STATUS_DIVORCED = 'DIVORCED';
+    const MARITAL_STATUS_WITH_PARTNER = 'WITH_PARTNER';
+    const MARITAL_STATUS_WIDOW = 'WIDOW';
+
+    const HOUSING_TYPE_RENTED_ROOM = 'RENTED_ROOM';
+    const HOUSING_TYPE_RENTED_APARTMENT_OR_HOUSE = 'RENTED_APARTMENT_OR_HOUSE';
+    const HOUSING_TYPE_OWN_HOUSE_OR_APARTMENT = 'OWN_HOUSE_OR_APARTMENT';
+    const HOUSING_TYPE_WITH_PARENTS = 'WITH_PARENTS';
 
     public $firstName;
 
@@ -67,6 +72,8 @@ class Customer extends Model
 
     public $postalIndex;
 
+    public $housingType;
+
     public $netoIncome;
 
     public $occupation;
@@ -85,13 +92,17 @@ class Customer extends Model
 
     public $dependantCount;
 
-    public $hasBadCreditHistory;
+    public $hasBadCreditHistory = false;
 
-    public $hasAgreeElectronicServices;
+    public $hasAgreeElectronicServices = true;
 
-    public $hasAgreePersonalDataProtection;
+    public $hasAgreePersonalDataProtection = true;
 
-    public $hasAgreeDataSharing;
+    public $hasAgreeDataSharing = true;
+
+    public $hasLivingAtRegisteredAddress = true;
+
+    public $monthlyExpenses;
 
     /**
      * @inheritdoc
@@ -124,10 +135,15 @@ class Customer extends Model
                     'loanPeriod',
                     'maritalStatus',
                     'dependantCount',
+                    'housingType',
+                    'monthlyExpenses',
                 ],
                 'trim',
             ],
             ['personalId', 'filter', 'filter' => 'strtoupper'],
+            [['bankAccountNumber', 'postalIndex'], 'filter', function ($value) {
+                return preg_replace('/\s/', '', $value);
+            }],
             [
                 [
 
@@ -152,9 +168,8 @@ class Customer extends Model
                     'loanPeriod',
                     'maritalStatus',
                     'dependantCount',
-
-                    //'housing_type',
-                    //'monthly_expenses'
+                    'housingType',
+                    'monthlyExpenses',
                 ],
                 'required',
             ],
@@ -169,10 +184,17 @@ class Customer extends Model
             ['gender', 'in', 'range' => [self::GENDER_MALE, self::GENDER_FEMALE]],
             [
                 [
-                    'hasBadCreditHistory',
                     'hasAgreeElectronicServices',
                     'hasAgreePersonalDataProtection',
                     'hasAgreeDataSharing',
+                    'hasLivingAtRegisteredAddress',
+                ],
+                'default',
+                'value' => true,
+            ],
+            [
+                [
+                    'hasBadCreditHistory',
                 ],
                 'default',
                 'value' => false,
@@ -183,6 +205,7 @@ class Customer extends Model
                     'hasAgreeElectronicServices',
                     'hasAgreePersonalDataProtection',
                     'hasAgreeDataSharing',
+                    'hasLivingAtRegisteredAddress',
                 ],
                 'boolean'
             ],
@@ -234,9 +257,16 @@ class Customer extends Model
                     ]);
                 },
             ],
+            [['monthlyExpenses', 'netoIncome'], 'integer', 'min' => 1],
             [['birthDate', 'remunerationDeadline'], 'date', 'format' => 'php:Y-m-d'],
             ['employedSince', 'date', 'format' => 'php:Y-m-d', 'max' => (string)(new DateTime())->format('Y-m-d')],
             ['postalIndex', PostalIndexValidator::class],
+            ['housingType', 'in', 'range' => [
+                self::HOUSING_TYPE_RENTED_ROOM,
+                self::HOUSING_TYPE_RENTED_APARTMENT_OR_HOUSE,
+                self::HOUSING_TYPE_OWN_HOUSE_OR_APARTMENT,
+                self::HOUSING_TYPE_WITH_PARENTS,
+            ]],
         ];
     }
 }
