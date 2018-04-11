@@ -2,6 +2,11 @@
 
 namespace credy\api\v1\es\models;
 
+use credy\api\v1\es\validators\IbanValidator;
+use credy\api\v1\es\validators\NameValidator;
+use credy\api\v1\es\validators\PersonalIdValidator;
+use credy\api\v1\es\validators\PostalIndexValidator;
+use DateTime;
 use yii\base\Model;
 
 /**
@@ -38,6 +43,8 @@ class Customer extends Model
 
     public $lastName;
 
+    public $secondName;
+
     public $gender;
 
     public $email;
@@ -66,7 +73,7 @@ class Customer extends Model
 
     public $employedSince;
 
-    public $renumerationDeadline;
+    public $remunerationDeadline;
 
     public $bankAccountNumber;
 
@@ -96,10 +103,140 @@ class Customer extends Model
                 [
                     'firstName',
                     'lastName',
+                    'secondName',
+                    'gender',
+                    'email',
+                    'phone',
+                    'phonePlan',
+                    'nationality',
+                    'birthDate',
+                    'personalId',
+                    'city',
+                    'street',
+                    'houseNumber',
+                    'postalIndex',
+                    'netoIncome',
+                    'occupation',
+                    'employedSince',
+                    'remunerationDeadline',
+                    'bankAccountNumber',
+                    'loanSum',
+                    'loanPeriod',
+                    'maritalStatus',
+                    'dependantCount',
                 ],
                 'trim',
             ],
+            ['personalId', 'filter', 'filter' => 'strtoupper'],
+            [
+                [
+
+                    'firstName',
+                    'lastName',
+                    'secondName',
+                    'gender',
+                    'email',
+                    'phone',
+                    'phonePlan',
+                    'nationality',
+                    'birthDate',
+                    'personalId',
+                    'city',
+                    'street',
+                    'houseNumber',
+                    'postalIndex',
+                    'netoIncome',
+                    'occupation',
+                    'bankAccountNumber',
+                    'loanSum',
+                    'loanPeriod',
+                    'maritalStatus',
+                    'dependantCount',
+
+                    //'housing_type',
+                    //'monthly_expenses'
+                ],
+                'required',
+            ],
+            [
+                [
+                    'firstName',
+                    'lastName',
+                    'secondName',
+                ],
+                NameValidator::class,
+            ],
             ['gender', 'in', 'range' => [self::GENDER_MALE, self::GENDER_FEMALE]],
+            [
+                [
+                    'hasBadCreditHistory',
+                    'hasAgreeElectronicServices',
+                    'hasAgreePersonalDataProtection',
+                    'hasAgreeDataSharing',
+                ],
+                'default',
+                'value' => false,
+            ],
+            [
+                [
+                    'hasBadCreditHistory',
+                    'hasAgreeElectronicServices',
+                    'hasAgreePersonalDataProtection',
+                    'hasAgreeDataSharing',
+                ],
+                'boolean'
+            ],
+            ['personalId', PersonalIdValidator::class],
+            ['email', 'email', 'checkDNS' => true],
+            [
+                [
+                    'loanSum',
+                    'loanPeriod',
+                    'netoIncome',
+                ],
+                'integer',
+            ],
+            ['bankAccountNumber', IbanValidator::class],
+            ['phonePlan', 'in', 'range' => [self::PHONE_PLAN_PREPAID, self::PHONE_PLAN_CONTRACT]],
+            ['maritalStatus', 'in', 'range' => [
+                self::MARITAL_STATUS_SINGLE,
+                self::MARITAL_STATUS_MARRIED,
+                self::MARITAL_STATUS_DIVORCED,
+                self::MARITAL_STATUS_WITH_PARTNER,
+                self::MARITAL_STATUS_WIDOW,
+            ]],
+            ['occupation', 'in', 'range' => [
+                self::EMPLOYMENT_EMPLOYED_INDEFINITE_PERIOD,
+                self::EMPLOYMENT_EMPLOYED_SPECIFIED_PERIOD,
+                self::EMPLOYMENT_WRITTEN_CONTRACT_OR_ORDER,
+                self::EMPLOYMENT_ECONOMIC_ACTIVITY,
+                self::EMPLOYMENT_UNEMPLOYED,
+                self::EMPLOYMENT_MATERNITY_LEAVE,
+                self::EMPLOYMENT_BENEFITS,
+                self::EMPLOYMENT_STUDENT,
+                self::EMPLOYMENT_PENSIONER1,
+                self::EMPLOYMENT_PENSIONER2,
+                self::EMPLOYMENT_OTHER,
+            ]],
+            [
+                [
+                    'remunerationDeadline',
+                    'employedSince'
+                ],
+                'required',
+                'when' => function () {
+                    return in_array($this->occupation, [
+                        self::EMPLOYMENT_EMPLOYED_INDEFINITE_PERIOD,
+                        self::EMPLOYMENT_ECONOMIC_ACTIVITY,
+                        self::EMPLOYMENT_STUDENT,
+                        self::EMPLOYMENT_MATERNITY_LEAVE,
+                        self::EMPLOYMENT_PENSIONER1,
+                    ]);
+                },
+            ],
+            [['birthDate', 'remunerationDeadline'], 'date', 'format' => 'php:Y-m-d'],
+            ['employedSince', 'date', 'format' => 'php:Y-m-d', 'max' => (string)(new DateTime())->format('Y-m-d')],
+            ['postalIndex', PostalIndexValidator::class],
         ];
     }
 }

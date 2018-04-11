@@ -52,7 +52,7 @@ class LeadRequestBuilder implements ILeadRequestBuilder
                 'nationality' => $this->_customer->nationality,
                 'birth_date' => $this->_customer->birthDate,
                 'employed_since' => $this->_customer->employedSince,
-                'renumeration_deadline' => $this->_customer->renumerationDeadline,
+                'remuneration_deadline' => $this->_customer->remunerationDeadline,
                 'dependant_count' => $this->_customer->dependantCount,
                 'bad_credit_history' => $this->_customer->hasBadCreditHistory,
                 'agree_electronic_services' => $this->_customer->hasAgreeElectronicServices,
