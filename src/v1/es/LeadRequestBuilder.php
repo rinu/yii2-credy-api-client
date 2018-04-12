@@ -66,6 +66,7 @@ class LeadRequestBuilder implements ILeadRequestBuilder
                 'current_employment_years' => $employmentDuration->y,
                 'lives_at_registered_address' => $this->_customer->hasLivingAtRegisteredAddress,
                 'monthly_expenses' => $this->_customer->monthlyExpenses,
+                'meta' => $this->_customer->meta,
             ],
         ];
     }
