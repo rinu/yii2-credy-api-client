@@ -7,6 +7,7 @@ use credy\api\v1\es\validators\NameValidator;
 use credy\api\v1\es\validators\PersonalIdValidator;
 use credy\api\v1\es\validators\PostalIndexValidator;
 use DateTime;
+use Yii;
 use yii\base\Model;
 
 /**
@@ -104,6 +105,8 @@ class Customer extends Model
 
     public $monthlyExpenses;
 
+    public $meta;
+
     /**
      * @inheritdoc
      */
@@ -137,6 +140,7 @@ class Customer extends Model
                     'dependantCount',
                     'housingType',
                     'monthlyExpenses',
+                    'meta',
                 ],
                 'trim',
             ],
@@ -267,6 +271,46 @@ class Customer extends Model
                 self::HOUSING_TYPE_OWN_HOUSE_OR_APARTMENT,
                 self::HOUSING_TYPE_WITH_PARENTS,
             ]],
+            ['meta', 'default'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'firstName' => Yii::t('credy', 'First name'),
+            'lastName' => Yii::t('credy', 'Last name'),
+            'secondName' => Yii::t('credy', 'Second name'),
+            'gender' => Yii::t('credy', 'Gender'),
+            'email' => Yii::t('credy', 'Email'),
+            'phone' => Yii::t('credy', 'Phone'),
+            'phonePlan' => Yii::t('credy', 'Phone plan'),
+            'nationality' => Yii::t('credy', 'Nationality'),
+            'birthDate' => Yii::t('credy', 'Birth date'),
+            'personalId' => Yii::t('credy', 'Personal ID'),
+            'city' => Yii::t('credy', 'City'),
+            'street' => Yii::t('credy', 'Street'),
+            'houseNumber' => Yii::t('credy', 'House number'),
+            'postalIndex' => Yii::t('credy', 'Postal index'),
+            'housingType' => Yii::t('credy', 'Housing type'),
+            'netoIncome' => Yii::t('credy', 'Neto income'),
+            'occupation' => Yii::t('credy', 'Occupation'),
+            'employedSince' => Yii::t('credy', 'Employed since'),
+            'remunerationDeadline' => Yii::t('credy', 'Remuneration deadline'),
+            'bankAccountNumber' => Yii::t('credy', 'Bank account number'),
+            'loanSum' => Yii::t('credy', 'Loan sum'),
+            'loanPeriod' => Yii::t('credy', 'Loan period'),
+            'maritalStatus' => Yii::t('credy', 'Marital status'),
+            'dependantCount' => Yii::t('credy', 'Dependant count'),
+            'hasBadCreditHistory' => Yii::t('credy', 'Bad credit history'),
+            'hasAgreeElectronicServices' => Yii::t('credy', 'Agree electronic services'),
+            'hasAgreePersonalDataProtection' => Yii::t('credy', 'Agree personal data protection'),
+            'hasAgreeDataSharing' => Yii::t('credy', 'Agree data sharing'),
+            'hasLivingAtRegisteredAddress' => Yii::t('credy', 'Living at registered address'),
+            'monthlyExpenses' => Yii::t('credy', 'Monthly expenses'),
         ];
     }
 }
