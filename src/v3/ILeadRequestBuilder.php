@@ -3,11 +3,21 @@
 namespace credy\api\v3;
 
 /**
- * Interface ICustomerRequestBuilder
+ * Interface ILeadRequestBuilder
  * @package credy\api\v3
  */
-interface ICustomerRequestBuilder
+interface ILeadRequestBuilder
 {
+    /**
+     * @return string
+     */
+    public function getCustomerId();
+
+    /**
+     * @return string
+     */
+    public function getIp();
+
     /**
      * @return array
      */
