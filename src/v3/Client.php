@@ -115,6 +115,28 @@ class Client extends Component
     }
 
     /**
+     * @param ILeadStatusRequestBuilder $builder
+     * @return LeadStatusResponse
+     * @throws InvalidConfigException
+     */
+    public function sendLeadStatusRequest(ILeadStatusRequestBuilder $builder)
+    {
+        /** @var HttpClient $httpClient */
+        $httpClient = Instance::ensure($this->httpClient, HttpClient::class);
+        $response = Yii::createObject(LeadStatusResponse::class);
+
+        try {
+            $httpResponse = $httpClient->get('leads/' . $builder->getLeadId())->send();
+            $response->setCode($httpResponse->getStatusCode());
+            $response->setRawData($httpResponse->getData());
+        } catch (HttpClientException $exception) {
+            $response->setCode(500);
+            $response->setRawData(['message' => $exception->getMessage()]);
+        }
+        return $response;
+    }
+
+    /**
      * @param integer $timestamp
      * @param string $apiKey
      * @param string $secretKey
