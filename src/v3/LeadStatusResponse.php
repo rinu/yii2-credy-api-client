@@ -11,9 +11,9 @@ use yii\helpers\ArrayHelper;
  */
 class LeadStatusResponse extends BaseObject
 {
-    const STATUS_REJECTED = "REJECTED";
-    const STATUS_ACCEPTED = "ACCEPTED";
-    const STATUS_INTERACTION = "INTERACTION";
+    const STATUS_REJECTED = 'REJECTED';
+    const STATUS_ACCEPTED = 'ACCEPTED';
+    const STATUS_INTERACTION = 'INTERACTION';
 
     /**
      * @var integer

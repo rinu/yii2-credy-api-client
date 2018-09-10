@@ -20,7 +20,11 @@
         }
     },
     "require": {
-        "yiisoft/yii2-httpclient": "~2.0.6",
+        "yiisoft/yii2-httpclient": "^2.0",
         "globalcitizen/php-iban": "^2.6"
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.4",
+        "yiisoft/yii2-coding-standards": "^2.0"
     }
 }

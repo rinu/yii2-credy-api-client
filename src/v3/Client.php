@@ -9,6 +9,7 @@ use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\httpclient\Client as HttpClient;
 use yii\httpclient\Exception as HttpClientException;
+use yii\httpclient\Request as HttpClientRequest;
 
 /**
  * Class Client
@@ -30,6 +31,11 @@ class Client extends Component
     public $secretKey;
 
     /**
+     * @var string
+     */
+    public $language = 'en-US';
+
+    /**
      * @var array|HttpClient|string
      */
     public $httpClient = [
@@ -43,13 +49,13 @@ class Client extends Component
      */
     public function init()
     {
+        parent::init();
         if ($this->apiKey === null) {
             throw new InvalidConfigException('`apiKey` is required.');
         }
         if ($this->secretKey === null) {
             throw new InvalidConfigException('`secretKey` is required.');
         }
-        parent::init();
     }
 
     /**
@@ -72,7 +78,10 @@ class Client extends Component
                 ],
             ]);
 
-            $httpResponse = $httpClient->post('customers', $data)->send();
+            $httpResponse = $this
+                ->prepareRequest($httpClient->post('customers', $data))
+                ->send()
+            ;
             $response->setCode($httpResponse->getStatusCode());
             $response->setRawData($httpResponse->getData());
         } catch (HttpClientException $exception) {
@@ -104,7 +113,10 @@ class Client extends Component
                 ],
             ]);
 
-            $httpResponse = $httpClient->post('leads?customer=' . $builder->getCustomerId(), $data)->send();
+            $httpResponse = $this
+                ->prepareRequest($httpClient->post('leads?customer=' . $builder->getCustomerId(), $data))
+                ->send()
+            ;
             $response->setCode($httpResponse->getStatusCode());
             $response->setRawData($httpResponse->getData());
         } catch (HttpClientException $exception) {
@@ -126,7 +138,10 @@ class Client extends Component
         $response = Yii::createObject(LeadStatusResponse::class);
 
         try {
-            $httpResponse = $httpClient->get('leads/' . $builder->getLeadId())->send();
+            $httpResponse = $this
+                ->prepareRequest($httpClient->get('leads/' . $builder->getLeadId()))
+                ->send()
+            ;
             $response->setCode($httpResponse->getStatusCode());
             $response->setRawData($httpResponse->getData());
         } catch (HttpClientException $exception) {
@@ -145,5 +160,15 @@ class Client extends Component
     public function createSignature($timestamp, $apiKey, $secretKey)
     {
         return sha1($timestamp . $apiKey . $secretKey);
+    }
+
+    /**
+     * @param HttpClientRequest $request
+     * @return HttpClientRequest
+     */
+    private function prepareRequest(HttpClientRequest $request)
+    {
+        $request->addHeaders(['Accept-Language' => $this->language]);
+        return $request;
     }
 }
