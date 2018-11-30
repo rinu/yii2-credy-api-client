@@ -152,6 +152,32 @@ class Client extends Component
     }
 
     /**
+     * @param string $url
+     * @param array|string $postData
+     * @return Response
+     * @throws InvalidConfigException
+     */
+    public function sendPostRequest($url, $postData)
+    {
+        /** @var HttpClient $httpClient */
+        $httpClient = Instance::ensure($this->httpClient, HttpClient::class);
+        $response = Yii::createObject(Response::class);
+
+        try {
+            $httpResponse = $this
+                ->prepareRequest($httpClient->post($url, $postData))
+                ->send()
+            ;
+            $response->setCode($httpResponse->getStatusCode());
+            $response->setRawData($httpResponse->getData());
+        } catch (HttpClientException $exception) {
+            $response->setCode(500);
+            $response->setRawData(['message' => $exception->getMessage()]);
+        }
+        return $response;
+    }
+
+    /**
      * @param integer $timestamp
      * @param string $apiKey
      * @param string $secretKey
@@ -168,7 +194,10 @@ class Client extends Component
      */
     private function prepareRequest(HttpClientRequest $request)
     {
-        $request->addHeaders(['Accept-Language' => $this->language]);
+        $request->addHeaders([
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'Accept-Language' => $this->language
+        ]);
         return $request;
     }
 }
